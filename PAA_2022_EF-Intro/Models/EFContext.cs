@@ -23,7 +23,29 @@ namespace PAA_2022_EF_Intro.Models
         // ToDo: Establecer las relaciones y restricciones de la tabla
         // * Definir clave primaria * Establecer las relaciones
         // * Definir cuáles son obligatorios
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Definir claves primarias
+            modelBuilder.Entity<Cancion>().HasKey(i => i.Id);
+            modelBuilder.Entity<Album>().HasKey(j => j.Id);
 
+            // Definir relaciones uno a muchos: Canción a Álbum
+            modelBuilder.Entity<Cancion>()
+                .HasOne<Album>(s => s.Album)
+                .WithMany(g => g.Canciones)
+                .HasForeignKey(c => c.AlbumId);
+
+            // Definimos los obligatorios (not null - mandatory) 
+            modelBuilder.Entity<Cancion>().Property(s => s.AlbumId).IsRequired();
+            modelBuilder.Entity<Cancion>().Property(s => s.Titulo).IsRequired();
+            modelBuilder.Entity<Cancion>().Property(s => s.Duracion).IsRequired();
+
+            modelBuilder.Entity<Album>().Property(s => s.Titulo).IsRequired();
+            modelBuilder.Entity<Album>().Property(s => s.Lanzamiento)
+                .HasDefaultValue(DateTime.Now) // Indicar un valor por defecto
+                .IsRequired();
+            modelBuilder.Entity<Album>().Property(s => s.Productora).IsRequired();
+        }
 
     }
 }
