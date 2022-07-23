@@ -6,8 +6,7 @@ namespace PAA_2022_EF_Intro.Models
     {
         // 1. Crear atributo que almacene la cadena de conexión a la BD
         private const string ConnectionString = "server=localhost;port=3306;database=musica_db;user=root;password=;Connect Timeout=5;";
-
-        // ToDo: Para revisar con calma, la inclusión y/o modificaciones que se deban hacer
+       
         // para configurar la instancia inicial de MySQL en conexión al proyecto
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -20,9 +19,8 @@ namespace PAA_2022_EF_Intro.Models
         public DbSet<Cancion> Canciones { get; set; }
 
         // 3. Configurar los modelos 
-        // ToDo: Establecer las relaciones y restricciones de la tabla
         // * Definir clave primaria * Establecer las relaciones
-        // * Definir cuáles son obligatorios
+        // * Definir cuáles son obligatorios * Cuál tiene valor por defecto
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Definir claves primarias
@@ -36,10 +34,12 @@ namespace PAA_2022_EF_Intro.Models
                 .HasForeignKey(c => c.AlbumId);
 
             // Definimos los obligatorios (not null - mandatory) 
+            // Canción:
             modelBuilder.Entity<Cancion>().Property(s => s.AlbumId).IsRequired();
             modelBuilder.Entity<Cancion>().Property(s => s.Titulo).IsRequired();
             modelBuilder.Entity<Cancion>().Property(s => s.Duracion).IsRequired();
 
+            // Álbum:
             modelBuilder.Entity<Album>().Property(s => s.Titulo).IsRequired();
             modelBuilder.Entity<Album>().Property(s => s.Lanzamiento)
                 .HasDefaultValue(DateTime.Now) // Indicar un valor por defecto
